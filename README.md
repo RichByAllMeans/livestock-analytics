@@ -18,7 +18,9 @@ schema (read-only) — never writes back to it.
 ```
 models/     dim_*.sql, fct_*.sql      (star schema)
 reports/    herd_summary.sql, financial_summary.sql, health_status.sql,
-            low_stock.sql, cost_trends.sql   (report queries)
+            low_stock.sql, cost_trends.sql, mortality_summary.sql,
+            reorder_recommendations.sql, vaccination_due.sql,
+            breeding_due.sql   (report queries)
 ```
 
 ## Notes
