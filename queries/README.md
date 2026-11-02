@@ -4,11 +4,19 @@ Read-only SQL for each product feature. The backend executes these and returns
 plain rows for pages, forms and PDF endpoints. Every query is tenant-scoped and
 uses the same `:param` convention as `reports/`.
 
-Set the tenant on the connection as well:
+Set the tenant on the connection as well. Use a transaction-local setting so a
+pooled connection cannot carry one tenant's context into the next request:
 
 ```sql
-SET app.tenant_id = '<tenant-uuid>';
+BEGIN;
+SELECT set_config('app.tenant_id', $1, true);  -- true = transaction-local
+-- run the query below with the same tenant id
+COMMIT;
 ```
+
+The application must connect as a **non-owner role**: RLS is enabled but not
+`FORCE`d, so table owners and superusers bypass it. Never take `tenant_id` from
+client input; derive it from the authenticated session.
 
 ## Query catalogue
 
